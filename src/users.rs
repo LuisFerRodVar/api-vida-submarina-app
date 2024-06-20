@@ -1,7 +1,6 @@
-use actix_web::{web, App, HttpServer, Responder, HttpResponse};
-use mongodb::{Client, options::ClientOptions, bson::{doc, oid::ObjectId, Document}};
+use actix_web::{web, Responder, HttpResponse};
+use mongodb::{Client, bson::{doc, oid::ObjectId }};
 use serde::{Deserialize, Serialize};
-use futures_util::stream::StreamExt; // Importar futures_util::stream::StreamExt
 
 #[derive(Serialize, Deserialize)]
 pub struct User {
