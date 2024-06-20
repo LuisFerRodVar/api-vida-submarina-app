@@ -15,6 +15,9 @@ pub struct User {
 
 pub async fn create_user(client: web::Data<Client>, user: web::Json<User>) -> impl Responder {
     let collection: mongodb::Collection<User> = client.database("vida_submarina").collection("users");
+    if collection.find_one(doc! {"email": &user.email}, None).await.unwrap().is_some(){
+        return HttpResponse::Conflict().json("User already exists");
+    }
     let new_user = User {
         id: None,
         username: user.username.clone(),
@@ -58,3 +61,4 @@ pub async fn modify_user(client: web::Data<Client>, user: web::Json<User>) -> im
         Err(err) => HttpResponse::InternalServerError().json(err.to_string()),
     }
 }
+

@@ -15,6 +15,7 @@ async fn main() -> std::io::Result<()> {
             .app_data(web::Data::new(client.clone()))
             .route("/users", web::post().to(users::create_user))
             .route("/login", web::get().to(users::login))
+            .route("/users", web::put().to(users::modify_user))
     })
     .bind(("127.0.0.1", 8080))?
     .run()
