@@ -17,6 +17,8 @@ async fn main() -> std::io::Result<()> {
             .route("/users", web::put().to(users::modify_user))
             .route("/news", web::post().to(news::create_news))
             .route("/news", web::get().to(news::get_news))
+            .route("/species", web::post().to(species::create_specie))
+            .route("/species", web::get().to(species::get_species))
     })
     .bind(("127.0.0.1", 8080))?
     .run()
