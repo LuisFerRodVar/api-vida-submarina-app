@@ -14,7 +14,7 @@ pub struct User {
 }
 
 pub async fn create_user(client: web::Data<Client>, user: web::Json<User>) -> impl Responder {
-    let collection = client.database("vida_submarina").collection("users");
+    let collection: mongodb::Collection<User> = client.database("vida_submarina").collection("users");
     let new_user = User {
         id: None,
         username: user.username.clone(),
@@ -24,6 +24,37 @@ pub async fn create_user(client: web::Data<Client>, user: web::Json<User>) -> im
     };
     match collection.insert_one(new_user, None).await {
         Ok(_) => HttpResponse::Created().json("User created"),
+        Err(err) => HttpResponse::InternalServerError().json(err.to_string()),
+    }
+}
+pub async fn login(client: web::Data<Client>, user: web::Json<User>) -> impl Responder {
+    let collection: mongodb::Collection<User> = client.database("vida_submarina").collection("users");
+    let filter = doc! {
+        "email": &user.email,
+        "password": &user.password
+    };
+    match collection.find_one(filter, None).await {
+        Ok(user) => match user {
+            Some(user) => HttpResponse::Ok().json(user),
+            None => HttpResponse::NotFound().json("User not found"),
+        },
+        Err(err) => HttpResponse::InternalServerError().json(err.to_string()),
+    }
+}
+pub async fn modify_user(client: web::Data<Client>, user: web::Json<User>) -> impl Responder {
+    let collection: mongodb::Collection<User> = client.database("vida_submarina").collection("users");
+    let filter = doc! {
+        "email": &user.email
+    };
+    let update = doc! {
+        "$set": {
+            "username": &user.username,
+            "email_2": &user.email_2,
+            "password": &user.password
+        }
+    };
+    match collection.update_one(filter, update, None).await {
+        Ok(_) => HttpResponse::Ok().json("User modified"),
         Err(err) => HttpResponse::InternalServerError().json(err.to_string()),
     }
 }
