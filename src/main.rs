@@ -1,6 +1,5 @@
-use actix_web::{web, App, HttpServer, Responder, HttpResponse};
-use mongodb::{Client, options::ClientOptions, bson::{doc, oid::ObjectId, Document}};
-use futures_util::stream::StreamExt;
+use actix_web::{web, App, HttpServer };
+use mongodb::{Client, options::ClientOptions };
 mod news;
 mod species;
 mod users;
@@ -16,6 +15,8 @@ async fn main() -> std::io::Result<()> {
             .route("/users", web::post().to(users::create_user))
             .route("/login", web::get().to(users::login))
             .route("/users", web::put().to(users::modify_user))
+            .route("/news", web::post().to(news::create_news))
+            .route("/news", web::get().to(news::get_news))
     })
     .bind(("127.0.0.1", 8080))?
     .run()
