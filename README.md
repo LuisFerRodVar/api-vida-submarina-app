@@ -15,5 +15,12 @@ API Rest para la aplicación vida submarina, la cual permite a los usuarios visu
 ## Instalación
 1. Clonar el repositorio
 ```bash
-git clone
+git clone https://github.com/LuisFerRodVar/api-vida-submarina-app.git
 ```
+2. Ejecutar el proyecto
+```bash
+cd api-vida-submarina-app
+cargo run
+```
+
+## Endpoints
