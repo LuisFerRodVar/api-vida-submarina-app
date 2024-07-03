@@ -13,7 +13,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .app_data(web::Data::new(client.clone()))
             .route("/api/users", web::post().to(users::create_user))
-            .route("/api/login", web::get().to(users::login))
+            .route("/api/login", web::post().to(users::login))
             .route("/api/users", web::put().to(users::modify_user))
             .route("/api/news", web::post().to(news::create_news))
             .route("/api/news", web::get().to(news::get_news))
